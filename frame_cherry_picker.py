@@ -29,14 +29,16 @@ class OBJECT_OT_BUTTON(bpy.types.Operator):
 
     def convert_string(frame_string, frames_render):
 
+
     def render_frames(frames_render):
-    #     for frame in renderFrames:
-    #         bpy.data.scenes[0].frame_current = frame
-    #         renderpath = filepath + str(bpy.data.scenes[0].frame_current)
-    #         bpy.data.scenes[0].render.filepath = renderpath
-    #         bpy.ops.render.render(write_still = True)
-    #         print(bpy.data.scenes[0].frame_current)
-    #     bpy.data.scenes[0].render.filepath = filepath
+        filepath = bpy.data.scenes[0].render.filepath
+        for frame in frames_render:
+            bpy.data.scenes[0].frame_current = frame
+            renderpath = filepath + str(bpy.data.scenes[0].frame_current)
+            bpy.data.scenes[0].render.filepath = renderpath
+            bpy.ops.render.render(write_still = True)
+            print(bpy.data.scenes[0].frame_current)
+        bpy.data.scenes[0].render.filepath = filepath
 
     def execute(self, context):
         frame_string = bpy.data.scenes[0].render_frames_cherry_picker
