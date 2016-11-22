@@ -7,7 +7,6 @@ This is an addon for Blender which allows users to specify which frames they wis
 <ul>
   <li>frame, frame, frame</li>
   <li>frame-frame</li>
-  <li>frame:frame:frame</li>
 </ul>
 <p>You may enter the frames to be rendered using any of the formats from above, or any combination of formats.</p>
 
