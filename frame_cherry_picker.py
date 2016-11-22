@@ -27,20 +27,6 @@ class OBJECT_OT_BUTTON(bpy.types.Operator):
     bl_idname = "frame.cherrypicker"
     bl_label = "Submit"
 
-    def convert_string(frame_string, frames_render):
-        frame_split = frame_string.split(',')
-        for frame in frame_split:
-            hyphen = False
-            for char in frame:
-                if char == '-':
-                    hyphen = True
-            if hyphen == True:
-                temp = frame.split('-')
-                for num in range(int(temp[0]), int(temp[1])+1):
-                    frame_render.append(num)
-            else:
-                frame_render.append(frame)
-
     def execute(self, context):
         frame_string = bpy.data.scenes[0].render_frames_cherry_picker
         frames_render = []
@@ -49,48 +35,63 @@ class OBJECT_OT_BUTTON(bpy.types.Operator):
         render_frames(frames_render)
         return{'FINISHED'}
 
-    def render_frames(frames_render):
-        filepath = bpy.data.scenes[0].render.filepath
-        for frame in frames_render:
-            bpy.data.scenes[0].frame_current = frame
-            renderpath = filepath + str(bpy.data.scenes[0].frame_current)
-            bpy.data.scenes[0].render.filepath = renderpath
-            bpy.ops.render.render(write_still = True)
-            print(bpy.data.scenes[0].frame_current)
-        bpy.data.scenes[0].render.filepath = filepath
 
-    def sort_frames(frames_render):
-        # Using merge sort algorithm
-        if len(frames_render)>1:
-            mid = len(frames_render)/2
-            left = frames_render[:mid]
-            right = frames_render[mid:]
+def convert_string(frame_string, frames_render):
+    frame_split = frame_string.split(',')
+    for frame in frame_split:
+        hyphen = False
+        for char in frame:
+            if char == '-':
+                hyphen = True
+        if hyphen == True:
+            temp = frame.split('-')
+            for num in range(int(temp[0]), int(temp[1])+1):
+                frames_render.append(num)
+        else:
+            frames_render.append(int(frame))
 
-            sort_frames(left)
-            soft_frame(right)
+def sort_frames(frames_render):
+    # Using merge sort algorithm
+    if len(frames_render)>1:
+        mid = len(frames_render)/2
+        left = frames_render[:int(mid)]
+        right = frames_render[int(mid):]
 
-            i=0
-            j=0
-            k=0
+        sort_frames(left)
+        sort_frames(right)
 
-            while i<len(left) and j<len(right):
-                if left[i] < right[j]:
-                    frames_render[k] = left[i]
-                    i +=1
-                else:
-                    frames_render[k] = right[j]
-                    j += 1
-                k += 1
+        i=0
+        j=0
+        k=0
 
-            while i<len(left):
+        while i<len(left) and j<len(right):
+            if left[i] < right[j]:
                 frames_render[k] = left[i]
-                i += 1
-                k += 1
-
-            while j < len(right):
+                i +=1
+            else:
                 frames_render[k] = right[j]
                 j += 1
-                k += 1
+            k += 1
+
+        while i<len(left):
+            frames_render[k] = left[i]
+            i += 1
+            k += 1
+
+        while j < len(right):
+            frames_render[k] = right[j]
+            j += 1
+            k += 1
+
+def render_frames(frames_render):
+    filepath = bpy.data.scenes[0].render.filepath
+    for frame in frames_render:
+        bpy.data.scenes[0].frame_current = frame
+        renderpath = filepath + str(bpy.data.scenes[0].frame_current)
+        bpy.data.scenes[0].render.filepath = renderpath
+        bpy.ops.render.render(write_still = True)
+        print(bpy.data.scenes[0].frame_current)
+    bpy.data.scenes[0].render.filepath = filepath
 
 def register():
     bpy.utils.register_class(cherry_picker)
