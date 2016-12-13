@@ -16,6 +16,11 @@ This is an addon for Blender which allows users to specify which frames they wis
 <h2>Issues and Contributions</h2>
 <p>Please make any issues with the addon known by creating a issues ticket. These will be solved in a prompt matter as they come. Also feel free to make any suggestions for the addons through here. If you make a pull request for this addon and it fits the use of the addon I will add it in.</p>
 
+<h2>Current Issues</h2>
+<ul>
+  <li>Need to make it so the addon is in only one tab, and not every properties tab.</li>
+</ul>
+
 <h2>To Do</h2>
 <ul>
   <li>Add a render progress section to track renders</li>
