@@ -33,8 +33,7 @@ class OBJECT_OT_BUTTON(bpy.types.Operator):
     def execute(self, context):
         frame_string = bpy.data.scenes[0].render_frames_cherry_picker
         frames_render = convert_string(frame_string)
-        sorted_frames = sort_frames(frames_render)
-        render_frames(sort_frames)
+        render_frames(frames_render)
         return{'FINISHED'}
 
 
@@ -53,10 +52,6 @@ def convert_string(frame_string):
         else:
             frames_render.append(int(frame))
 
-    return frames_render
-
-
-def sort_frames(frames_render):
     return sorted(frames_render)
 
 
