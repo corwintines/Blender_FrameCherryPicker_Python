@@ -6,11 +6,13 @@ bl_info = {
 
 import bpy
 
+
 class cherry_picker(bpy.types.Panel):
     bl_label = "Frame Cherry Picker"
     bl_id = "view3D.custom_menu"
     bl_space_type = 'PROPERTIES'
     bl_region_type = 'WINDOW'
+    bl_context = "render"
 
     def draw(self, context):
         layout = self.layout
@@ -23,20 +25,21 @@ class cherry_picker(bpy.types.Panel):
         row = layout.row()
         row.operator("frame.cherrypicker")
 
+
 class OBJECT_OT_BUTTON(bpy.types.Operator):
     bl_idname = "frame.cherrypicker"
     bl_label = "Submit"
 
     def execute(self, context):
         frame_string = bpy.data.scenes[0].render_frames_cherry_picker
-        frames_render = []
-        convert_string(frame_string, frames_render)
-        sort_frames(frames_render)
-        render_frames(frames_render)
+        frames_render = convert_string(frame_string)
+        sorted_frames = sort_frames(frames_render)
+        render_frames(sort_frames)
         return{'FINISHED'}
 
 
-def convert_string(frame_string, frames_render):
+def convert_string(frame_string):
+    frames_render = []
     frame_split = frame_string.split(',')
     for frame in frame_split:
         hyphen = False
@@ -46,42 +49,16 @@ def convert_string(frame_string, frames_render):
         if hyphen == True:
             temp = frame.split('-')
             for num in range(int(temp[0]), int(temp[1])+1):
-                frames_render.append(num)
+                frames_render.append(int(num))
         else:
             frames_render.append(int(frame))
 
+    return frames_render
+
+
 def sort_frames(frames_render):
-    # Using merge sort algorithm
-    if len(frames_render)>1:
-        mid = len(frames_render)/2
-        left = frames_render[:int(mid)]
-        right = frames_render[int(mid):]
+    return sorted(frames_render)
 
-        sort_frames(left)
-        sort_frames(right)
-
-        i=0
-        j=0
-        k=0
-
-        while i<len(left) and j<len(right):
-            if left[i] < right[j]:
-                frames_render[k] = left[i]
-                i +=1
-            else:
-                frames_render[k] = right[j]
-                j += 1
-            k += 1
-
-        while i<len(left):
-            frames_render[k] = left[i]
-            i += 1
-            k += 1
-
-        while j < len(right):
-            frames_render[k] = right[j]
-            j += 1
-            k += 1
 
 def render_frames(frames_render):
     filepath = bpy.data.scenes[0].render.filepath
@@ -93,15 +70,18 @@ def render_frames(frames_render):
         print(bpy.data.scenes[0].frame_current)
     bpy.data.scenes[0].render.filepath = filepath
 
+
 def register():
     bpy.utils.register_class(cherry_picker)
     bpy.utils.register_module(__name__)
     bpy.types.Scene.render_frames_cherry_picker = bpy.props.StringProperty (name = "", description = "Frames", default = "default")
 
+
 def unregister():
     bpy.utils.unregister_class(cherry_picker)
     bpy.utils.unregister_module(__name__)
     del bpy.types.Scene.render_frames_cherry_picker
+
 
 if __name__ == "__main__":
     register()
