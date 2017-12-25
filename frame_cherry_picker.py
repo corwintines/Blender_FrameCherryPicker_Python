@@ -7,7 +7,7 @@ bl_info = {
 import bpy
 
 
-class cherry_picker(bpy.types.Panel):
+class CherryPicker(bpy.types.Panel):
     bl_label = "Frame Cherry Picker"
     bl_id = "view3D.custom_menu"
     bl_space_type = 'PROPERTIES'
@@ -77,14 +77,14 @@ def render_frames(frames_render, frame_naming_type):
 
 
 def register():
-    bpy.utils.register_class(cherry_picker)
+    bpy.utils.register_class(CherryPicker)
     bpy.utils.register_module(__name__)
     bpy.types.Scene.render_frames_cherry_picker = bpy.props.StringProperty (description = "Frames to be rendered", default = "")
     bpy.types.Scene.render_frames_cherry_picker_render_type = bpy.props.BoolProperty(name="", description="Option to name files 0-render_frame_length to allow for easier use in compositing software")
 
 
 def unregister():
-    bpy.utils.unregister_class(cherry_picker)
+    bpy.utils.unregister_class(CherryPicker)
     bpy.utils.unregister_module(__name__)
     del bpy.types.Scene.render_frames_cherry_picker
 
