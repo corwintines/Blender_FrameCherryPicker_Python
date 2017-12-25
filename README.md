@@ -18,11 +18,10 @@ This is an addon for Blender which allows users to specify which frames they wis
 
 <h2>Currently Working On</h2>
 <ul>
-  <li>Custom file naming</li>
+  <li>Option to have naming of files be consecutive frame numbers, and not just the current frame being rendered</li>
 </ul>
 
 <h2>To Do</h2>
 <ul>
-  <li>Option to have naming of files be consecutive frame numbers, and not just the current frame being rendered</li>
   <li>Since UI for Blender freezes up while rendering, have a mouse icon to make users aware that this is working and not just hung up</li>
 </ul>

@@ -16,12 +16,17 @@ class cherry_picker(bpy.types.Panel):
 
     def draw(self, context):
         layout = self.layout
+        split = layout.split()
 
         # Layout for entering frames that need to be rendered
         row = layout.row()
-        row.label("Enter frames to render:")
+        row.prop(context.scene, "render_frames_cherry_picker", text="Input Frames")
         row = layout.row()
-        row.prop(context.scene, "render_frames_cherry_picker")
+        row.label("Enter file name (will use default if not specified):")
+        rd = context.scene.render
+        image_settings = rd.image_settings
+        file_format = image_settings.file_format
+        layout.prop(rd, "filepath", text="")
         row = layout.row()
         row.operator("frame.cherrypicker")
 
@@ -62,14 +67,13 @@ def render_frames(frames_render):
         renderpath = filepath + str(bpy.data.scenes[0].frame_current)
         bpy.data.scenes[0].render.filepath = renderpath
         bpy.ops.render.render(write_still = True)
-        print(bpy.data.scenes[0].frame_current)
     bpy.data.scenes[0].render.filepath = filepath
 
 
 def register():
     bpy.utils.register_class(cherry_picker)
     bpy.utils.register_module(__name__)
-    bpy.types.Scene.render_frames_cherry_picker = bpy.props.StringProperty (name = "", description = "Frames", default = "default")
+    bpy.types.Scene.render_frames_cherry_picker = bpy.props.StringProperty (name = "", description = "Frames", default = "")
 
 
 def unregister():
